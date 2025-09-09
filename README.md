@@ -1,3 +1,4 @@
+https://github.com/Katerina011/weblarek.git
 # Проектная работа "Веб-ларек"
 
 Стек: HTML, SCSS, TS, Webpack
