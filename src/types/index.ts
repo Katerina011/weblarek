@@ -4,3 +4,35 @@ export interface IApi {
     get<T extends object>(uri: string): Promise<T>;
     post<T extends object>(uri: string, data: object, method?: ApiPostMethods): Promise<T>;
 }
+
+export interface IProduct {
+    id: string;
+    description: string;
+    image: string;
+    title: string;
+    category: string;
+    price: number | null;
+    added?: boolean;
+}
+
+export interface IProductData {
+    items: IProduct[];
+    getItem(id: string):IProduct;
+}
+
+
+export interface IBuyer {
+    payment: 'card' | 'cash' | '';
+    email: string;
+    phone: string;
+    address: string;
+}
+
+export interface IBuyerData {
+    setBuyerData(buyerData: IBuyer): void;
+    orderValidation: (data:Record<keyof orderInfo, string>) => boolean;
+    contactsValidation: (data:Record<keyof contactsInfo, string>) =>boolean;
+}
+
+export type orderInfo = Pick<IBuyer, 'payment' | 'address'>;
+export type contactsInfo = Pick<IBuyer, 'email' | 'phone'>;

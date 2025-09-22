@@ -9,7 +9,7 @@ https://github.com/Katerina011/weblarek.git
 - src/components/base/ — папка с базовым кодом
 
 Важные файлы:
-- index.html — HTML-файл главной страницы
+- src\pages\index.html — HTML-файл главной страницы
 - src/types/index.ts — файл с типами
 - src/main.ts — точка входа приложения
 - src/scss/styles.scss — корневой файл стилей
@@ -21,7 +21,7 @@ https://github.com/Katerina011/weblarek.git
 
 ```
 npm install
-npm run start
+npm run dev
 ```
 
 или
@@ -99,3 +99,76 @@ Presenter - презентер содержит основную логику п
 `emit<T extends object>(event: string, data?: T): void` - инициализация события. При вызове события в метод передается название события и объект с данными, который будет использован как аргумент для вызова обработчика.  
 `trigger<T extends object>(event: string, context?: Partial<T>): (data: T) => void` - возвращает функцию, при вызове которой инициализируется требуемое в параметрах событие с передачей в него данных из второго параметра.
 
+### Данные 
+
+#### Карточка товара - интерфейс IProduct
+Для описания структуры товара.\
+interface IProduct {
+    id: string;
+    description: string;
+    image: string;
+    title: string;
+    category: string;
+    price: number | null;
+}
+
+#### Покупатель - интерфейс IBuyer
+
+interface IBuyer {
+    payment: 'card' | 'cash' | '';
+    email: string;
+    phone: string;
+    address: string;
+}
+
+#### Интерфейс для работы с данными покупателя - IBuyerData
+interface IBuyerData {
+    setBuyerData(buyerData: IBuyer): void; - установка данных покупателя.\
+    orderValidation: (data:Record<keyof orderInfo, string>) => boolean; - Валидация данных о заказе(способ оплаты и адрес доставки).\
+    contactsValidation: (data:Record<keyof contactsInfo, string>) =>boolean; - Валидация контактных данных(телефон и эл.почта).\
+}
+
+#### Типы
+type orderInfo - тип для данных о заказе 'payment' и 'address'(способ оплаты и адрес доставки).\
+type contactsInfo -тип для контактной информации покупателя 'email' и 'phone' (телефон и эл.почта).\
+
+#### Класс CatalogModel
+Отвечает за хранение и логику работы с каталогом товаров.\
+Класс реализует интерфейс IProductData.\
+Конструктор инициализирует пустой массив товаров при создании экземпляра.\
+Поле _items хранит массив товаров.\
+Методы класса:
+- Сеттер - для установки списка товаров.
+- Геттер - для получения списка товаров.
+- getItem(id: string): IProduct - для получения товара по идентификатору.
+
+#### Класс CartModel
+Содержит данные и логику работы корзины.\
+В поле _items хранится список товаров в корзине.\
+Конструктор инициализирует пустой массив товаров при создании экземпляра.\
+Методы класса:
+- hasItem(id: string): boolean - для проверки наличия товара в корзине по идентификатору.
+- addItem(item: IProduct): void - для добавления товара в корзину, если его еще нет в корзине. Если товар уже добавлен выдает ошибку.
+-  deleteItem(id: string): void - метод для удаления товара из корзины по идентификатору.
+- Геттер - для получения списка товаров в корзине.
+- getTotalItem(): number - для подсчета общего количества товаров в корзине.
+- getTotalPrice(): number - для расчета общей стоимости товаров в корзине.
+- clear(): void - для очистки корзины.
+
+#### Класс BuyerModel
+Отвечает за хранение и обработку данных покупателя.\
+Реализует интерфейсы IBuyer и IBuyerData.\
+Поля:
+ - payment - способ оплаты
+ - email - адрес электронной почты
+ - phone - номер телефона
+ - address - адрес доставки
+
+Методы:
+ - Геттер возвращает объект типа IBuyer.
+ - Сеттеры устанавливают значение для каждого поля.
+ - setBuyerData(buyerData: IBuyer): void - метод для установки всех данных одним объектом.
+ - isValidEmail(email: string): boolean - валидация email через регулярное выражение.
+ - isValidPhone(phone: string): boolean - валидация phone через регулярное выражение, с поддерживает формат с + и разделителями.
+ - orderValidation(data: Record<keyof orderInfo, string>): boolean - метод проверяет наличие указания способа оплаты и адреса доставки. В случае отстутствия одного или нескольких значений вернет false, текст ошибки выводится в консоль.
+ - contactsValidation(data: Record<keyof contactsInfo, string>): boolean - проверяет наличие номера телефона и адреса электронной почты, а также корректность их заполнения. В случает отсутвия одного или всех значений или ввода некорректных данных метод возвращает false, текст ошибки выводится в консоль.
