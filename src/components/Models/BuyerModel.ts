@@ -37,27 +37,25 @@ export class BuyerModel implements IBuyer, IBuyerData{
         this._address = buyerData.address;
     }
 
-     orderValidation(data: Record<keyof orderInfo, string>): boolean {
-        if (!data.payment) {
-            console.error('Не выбран способ оплаты');
-            return false;
-        }
-        if (!data.address) {
-            console.error('Не указан адрес доставки');
-            return false;
-        }
-        return true;
-    }
+    isValid(): Record<string, string> {
+        const errors: Record<string, string> = {};
 
-      contactsValidation(data: Record<keyof contactsInfo, string>): boolean {
-        if (!data.email) {
-            console.error('Не указан email');
-            return false;
+        if (!this._payment) {
+            errors.payment = 'Не выбран способ оплаты!';
         }
-        if (!data.phone) {
-            console.error('Не указан номер телефона');
-            return false;
+
+        if (!this._email) {
+            errors.email = 'Не указан email!';
         }
-        return true;
+
+        if (!this._phone) {
+            errors.phone = 'Не указан номер телефона!';
+        }
+
+        if (!this._address) {
+            errors.address = 'Не указан адрес доставки!';
+        }
+
+        return errors;
     }
 }

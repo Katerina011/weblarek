@@ -41,8 +41,7 @@ export interface IBuyer {
 
 export interface IBuyerData {
     setBuyerData(buyerData: IBuyer): void;
-    orderValidation: (data:Record<keyof orderInfo, string>) => boolean;
-    contactsValidation: (data:Record<keyof contactsInfo, string>) =>boolean;
+    isValid(): Record<string, string>;
 }
 
 export type orderInfo = Pick<IBuyer, 'payment' | 'address'>;

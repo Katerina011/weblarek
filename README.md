@@ -124,12 +124,10 @@ interface IBuyer {\
 #### Интерфейс для работы с данными покупателя - IBuyerData
 interface IBuyerData {\
     setBuyerData(buyerData: IBuyer): void;\
-    orderValidation: (data:Record<keyof orderInfo, string>) => boolean;\
-    contactsValidation: (data:Record<keyof contactsInfo, string>) =>boolean;\
+    isValid(): Record<string, string>;
 }
  - setBuyerData - установка данных покупателя.\
- - orderValidation - валидация данных о заказе(способ оплаты и адрес доставки).\
- - contactsValidation - валидация контактных данных(телефон и эл.почта).\
+ - isValid(): Record<string, string> -  возвращает объект, где ключи - это названия полей, которые были проверены, а значения - это сообщения об ошибках (или пустые строки, если поле валидно).
 
 #### Типы
 - type orderInfo - тип для данных о заказе 'payment' и 'address'(способ оплаты и адрес доставки).\
@@ -171,8 +169,7 @@ interface IBuyerData {\
  - Геттер возвращает объект типа IBuyer.
  - Сеттеры устанавливают значение для каждого поля.
  - setBuyerData(buyerData: IBuyer): void - метод для установки всех данных одним объектом.
- - orderValidation(data: Record<keyof orderInfo, string>): boolean - метод проверяет наличие указания способа оплаты и адреса доставки. В случае отстутствия одного или нескольких значений вернет false, текст ошибки выводится в консоль.
- - contactsValidation(data: Record<keyof contactsInfo, string>): boolean - проверяет наличие номера телефона и адреса электронной почты.В случает отсутвия одного или всех значений метод возвращает false, текст ошибки выводится в консоль.
+ - isValid(): Record<string, string> - валидация полей, проверяет заполнены ли поля payment, email, phone и address. Метод возвращает объект. Если поле не заполнено, добавляется соответствующая ошибка в объект.Если поле валидно, оно не включается в объект ошибок.
 
  ### Слой коммуникации
  #### Интерфейс для работы с API
@@ -200,10 +197,10 @@ interface IApiResponse {
 }\
 Описывает структуру ответа от сервера: статус код ответа и данные от сервера.
  #### Класс ProductApi 
- Класс для работы с API товаров. Наследует базовый класс Api и реализует интерфейс IApi.\
+ Класс для работы с API товаров. Наследует базовый класс Api.\
  Конструктор класса принимает два параметра: базовый URL для API запросов и дополнительные опции для настройки запросов.\
  Методы:
  - getProduct(): Promise<IProductServer[]> - получение списка товаров с сервера.
  - postOrder(orderData: IOrderData): Promise<IApiResponse> - метод для отправки данных заказа на сервер.
- реализуются методы get и post интерфейса IApi.
+
 
