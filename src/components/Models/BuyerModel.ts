@@ -37,15 +37,6 @@ export class BuyerModel implements IBuyer, IBuyerData{
         this._address = buyerData.address;
     }
 
-    protected isValidEmail(email: string): boolean {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
-    protected isValidPhone(phone: string): boolean {
-        const phoneRegex = /^\+?[0-9\s\-]{7,15}$/;
-        return phoneRegex.test(phone);
-    };
-
      orderValidation(data: Record<keyof orderInfo, string>): boolean {
         if (!data.payment) {
             console.error('Не выбран способ оплаты');
@@ -59,12 +50,12 @@ export class BuyerModel implements IBuyer, IBuyerData{
     }
 
       contactsValidation(data: Record<keyof contactsInfo, string>): boolean {
-        if (!data.email || !this.isValidEmail(data.email)) {
-            console.error('Некорректный email');
+        if (!data.email) {
+            console.error('Не указан email');
             return false;
         }
-        if (!data.phone || !this.isValidPhone(data.phone)) {
-            console.error('Некорректный номер телефона');
+        if (!data.phone) {
+            console.error('Не указан номер телефона');
             return false;
         }
         return true;

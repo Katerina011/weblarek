@@ -4,7 +4,7 @@ export class CartModel {
 
     constructor () {};
 
-    hasItem(id: string): boolean {
+    hasItem(id: string | number): boolean {
     return this._items.some(item => item.id === id);
 }
 
@@ -17,7 +17,7 @@ export class CartModel {
     
     }
 
-    deleteItem(id: string): void {
+    deleteItem(id: string | number): void {
         this._items = this._items.filter(item => item.id !== id);
     }
 
