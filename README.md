@@ -102,36 +102,38 @@ Presenter - презентер содержит основную логику п
 ### Слой данные 
 
 #### Карточка товара - интерфейс IProduct
-Для описания структуры товара.\
-interface IProduct {\
-    id: string;\
-    description: string;\
-    image: string;\
-    title: string;\
-    category: string;\
-    price: number | null;\
-}
+Для описания структуры товара.
+
+    interface IProduct {
+        id: string;
+        description: string;
+        image: string;
+        title: string;
+        category: string;
+        price: number | null;
+    }
 
 #### Покупатель - интерфейс IBuyer
 
-interface IBuyer {\
-    payment: 'card' | 'cash' | '';\
-    email: string;\
-    phone: string;\
-    address: string;\
-}
+    interface IBuyer {
+        payment: 'card' | 'cash' | '';
+        email: string;
+        phone: string;
+        address: string;
+    }
 
 #### Интерфейс для работы с данными покупателя - IBuyerData
-interface IBuyerData {\
-    setBuyerData(buyerData: IBuyer): void;\
-    isValid(): Record<string, string>;
-}
- - setBuyerData - установка данных покупателя.\
- - isValid(): Record<string, string> -  возвращает объект, где ключи - это названия полей, которые были проверены, а значения - это сообщения об ошибках (или пустые строки, если поле валидно).
+
+    interface IBuyerData {
+        setBuyerData(buyerData: IBuyer): void;
+        isValid(): Record<string, string>;
+    }
+ - `setBuyerData` - установка данных покупателя.\
+ - `isValid(): Record<string, string>` -  возвращает объект, где ключи - это названия полей, которые были проверены, а значения - это сообщения об ошибках (или пустые строки, если поле валидно).
 
 #### Типы
-- type orderInfo - тип для данных о заказе 'payment' и 'address'(способ оплаты и адрес доставки).\
-- type contactsInfo -тип для контактной информации покупателя 'email' и 'phone' (телефон и эл.почта).\
+- `type orderInfo` - тип для данных о заказе 'payment' и 'address'(способ оплаты и адрес доставки).\
+- `type contactsInfo` -тип для контактной информации покупателя 'email' и 'phone' (телефон и эл.почта).\
 
 #### Класс CatalogModel
 Отвечает за хранение и логику работы с каталогом товаров.\
@@ -141,66 +143,64 @@ interface IBuyerData {\
 Методы класса:
 - Сеттер - для установки списка товаров.
 - Геттер - для получения списка товаров.
-- getItem(id: string): IProduct - для получения товара по идентификатору.
+- `getItem(id: string): IProduct` - для получения товара по идентификатору.
 
 #### Класс CartModel
 Содержит данные и логику работы корзины.\
 В поле _items хранится список товаров в корзине.\
 Конструктор инициализирует пустой массив товаров при создании экземпляра.\
 Методы класса:
-- hasItem(id: string): boolean - для проверки наличия товара в корзине по идентификатору.
-- addItem(item: IProduct): void - для добавления товара в корзину, если его еще нет в корзине. Если товар уже добавлен выдает ошибку.
--  deleteItem(id: string): void - метод для удаления товара из корзины по идентификатору.
+- `hasItem(id: string): boolean` - для проверки наличия товара в корзине по идентификатору.
+- `addItem(item: IProduct): void` - для добавления товара в корзину, если его еще нет в корзине. Если товар уже добавлен выдает ошибку.
+-  `deleteItem(id: string): void` - метод для удаления товара из корзины по идентификатору.
 - Геттер - для получения списка товаров в корзине.
-- getTotalItem(): number - для подсчета общего количества товаров в корзине.
-- getTotalPrice(): number - для расчета общей стоимости товаров в корзине.
-- clear(): void - для очистки корзины.
+- `getTotalItem(): number` - для подсчета общего количества товаров в корзине.
+- `getTotalPrice(): number` - для расчета общей стоимости товаров в корзине.
+- `clear(): void` - для очистки корзины.
 
 #### Класс BuyerModel
 Отвечает за хранение и обработку данных покупателя.\
 Реализует интерфейсы IBuyer и IBuyerData.\
 Поля:
- - payment - способ оплаты
- - email - адрес электронной почты
- - phone - номер телефона
- - address - адрес доставки
+ - `payment` - способ оплаты
+ - `email`- адрес электронной почты
+ - `phone` - номер телефона
+ - `address` - адрес доставки
 
 Методы:
  - Геттер возвращает объект типа IBuyer.
  - Сеттеры устанавливают значение для каждого поля.
- - setBuyerData(buyerData: IBuyer): void - метод для установки всех данных одним объектом.
- - isValid(): Record<string, string> - валидация полей, проверяет заполнены ли поля payment, email, phone и address. Метод возвращает объект. Если поле не заполнено, добавляется соответствующая ошибка в объект.Если поле валидно, оно не включается в объект ошибок.
+ - `setBuyerData(buyerData: IBuyer): void` - метод для установки всех данных одним объектом.
+ - `isValid(): Record<string, string>` - валидация полей, проверяет заполнены ли поля payment, email, phone и address. Метод возвращает объект. Если поле не заполнено, добавляется соответствующая ошибка в объект.Если поле валидно, оно не включается в объект ошибок.
 
  ### Слой коммуникации
  #### Интерфейс для работы с API
- interface IApi {\
-    get<T extends object>(uri: string): Promise<T>;\
-    post<T extends object>(uri: string, data: object, method?: ApiPostMethods): Promise<T>\
-}\
-- get - метод для выполнения GET запроса
-- post - метод для выполнения POST/PUT/DELETE запросов.
-#### Интерфейс сервера товаров
-    interface IProductServer extends IProduct {};\
-Наследует базовый интерфейс товара.
+    interface IApi {
+        get<T extends object>(uri: string): Promise<T>;
+        post<T extends object>(uri: string, data: object, method: ApiPostMethods): Promise<T>
+    }
+- `get` - метод для выполнения GET запроса
+- `post` - метод для выполнения POST/PUT/DELETE запросов.
+    
 #### Интерфейс данных заказа
-interface IOrderData {\
-products: IProduct[];\
-buyer: IBuyer;\
-}\
+    interface IOrderData {
+        products: IProduct[];
+        buyer: IBuyer;
+    }
 Содержит массив выбранных товаров и информацию о покупателе.
 
 #### Интерфейс ответа API
 
-interface IApiResponse {
-    status: number;
-    data: any;
-}\
+    interface IApiResponse {
+        status: number;
+        data: any;
+    }
 Описывает структуру ответа от сервера: статус код ответа и данные от сервера.
  #### Класс ProductApi 
  Класс для работы с API товаров. Наследует базовый класс Api.\
  Конструктор класса принимает два параметра: базовый URL для API запросов и дополнительные опции для настройки запросов.\
  Методы:
- - getProduct(): Promise<IProductServer[]> - получение списка товаров с сервера.
- - postOrder(orderData: IOrderData): Promise<IApiResponse> - метод для отправки данных заказа на сервер.
+ - `getProduct(): Promise<IProductServer[]>` - получение списка товаров с сервера.
+ - `postOrder(orderData: IOrderData): Promise<IApiResponse>` - метод для отправки данных заказа на сервер.
 
 
