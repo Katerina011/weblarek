@@ -1,61 +1,73 @@
-import { IBuyer, IBuyerData, orderInfo, contactsInfo } from "../../types";
-export class BuyerModel implements IBuyer, IBuyerData{
+import { IBuyer} from "../../types";
+import { IEvents } from "../base/Events";
+
+export class BuyerModel implements IBuyer {
     protected _payment: 'card' | 'cash' | '' = '';
+    protected _address: string ='';
     protected _email: string = '';
     protected _phone: string = '';
-    protected _address: string ='';
+
+    constructor (protected events: IEvents) {}
 
     get buyer():IBuyer {
         return {
             payment: this._payment,
+            address: this._address,
             email: this._email,
             phone: this._phone,
-            address: this._address,
         };
     }
 
+    protected fieldValue(field: keyof IBuyer, value: any) {
+ 
+    this[`_${field}`]= value;
+ 
+    this.events.emit(`buyer:change`, {field});
+ }
+
     set payment(value: 'card' | 'cash' | '') {
-        this._payment = value;
+        this.fieldValue('payment', value);
+    }
+
+     set address(value: string) {
+        this.fieldValue('address', value)
     }
 
     set email(value: string) {
-        this._email = value;
+        this.fieldValue('email', value)
     }
 
     set phone(value: string) {
-        this._phone = value;
+        this.fieldValue('phone', value)
     }
 
-       set address(value: string) {
-        this._address = value;
-    }
-
-    setBuyerData(buyerData: IBuyer): void {
-        this._payment = buyerData.payment;
-        this._email = buyerData.email;
-        this._phone = buyerData.phone;
-        this._address = buyerData.address;
+    resetBuyer(): void {
+        this.fieldValue('payment', '');
+        this.fieldValue('address', '');
+        this.fieldValue('email', '');
+        this.fieldValue('phone', '');
     }
 
     isValid(): Record<string, string> {
         const errors: Record<string, string> = {};
 
         if (!this._payment) {
-            errors.payment = 'Не выбран способ оплаты!';
+            errors.payment = 'Необходимо выбрать способ оплаты!';
+        }
+
+         if (!this._address) {
+            errors.address = 'Необходимо указать адрес доставки!';
         }
 
         if (!this._email) {
-            errors.email = 'Не указан email!';
+            errors.email = 'Необходимо указать email!';
         }
 
         if (!this._phone) {
-            errors.phone = 'Не указан номер телефона!';
-        }
-
-        if (!this._address) {
-            errors.address = 'Не указан адрес доставки!';
+            errors.phone = 'Необходимо указать номер телефона!';
         }
 
         return errors;
     }
+
 }

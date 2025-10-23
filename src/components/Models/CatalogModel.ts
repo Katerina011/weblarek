@@ -1,25 +1,32 @@
-import { IProduct, IProductData } from "../../types";
-export class CatalogModel implements IProductData{
-   protected  _items: IProduct[];
+import { IProductData, IProduct } from "../../types";
+import { IEvents } from "../base/Events";
+
+export class CatalogModel {
+   items: IProductData;
+   protected events: IEvents;
    
-   constructor () {
-       this._items = [];
+   constructor (events: IEvents) {
+       this.items = {
+         total: 0,
+         items: [],
+       };
+      this.events = events;  
+  }
+
+   setItems(items: IProductData) {
+    this.items = items;
+    this.events.emit('model:cards updated')
    }
 
-   set items(data: IProduct[]) {
-    this._items = data;
+   getItems() {
+      return this.items.items;
    }
 
-   get items() {
-      return this._items;
-   }
-
-   getItem(id: string): IProduct {
-      const item = this._items.find(item => item.id === id);
+   getItem(id: string| number): IProduct {
+      const item = this.items.items.find(item => item.id === id);
       if(!item) {
          throw new Error(`Товар с ID ${id} не найден!`)
       }
       return item;
    }
-
 }

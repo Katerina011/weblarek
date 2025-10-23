@@ -6,6 +6,7 @@ export const API_URL = `${import.meta.env.VITE_API_ORIGIN}/api/weblarek`;
 которое хранится в объекте товара. */
 export const CDN_URL = `${import.meta.env.VITE_API_ORIGIN}/content/weblarek`;
 
+
 export const settings = {
 
 };
@@ -17,3 +18,6 @@ export const categoryMap = {
   'дополнительное': 'card__category_additional',
   'другое': 'card__category_other',
 };
+
+/**export const API_URL = `${process.env.API_ORIGIN}/api/weblarek`;
+export const CDN_URL = `${process.env.API_ORIGIN}/content/weblarek`;**/
