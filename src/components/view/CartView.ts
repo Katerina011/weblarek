@@ -34,11 +34,7 @@ export class CartView extends Component<ICart> {
     }
 
     btnDisabled(total: number) {
-        if(total=== 0) {
-            this.btnOrder.disabled = true;
-        } else {
-             this.btnOrder.disabled = false;
-        }
+        this.btnOrder.disabled = total === 0;
     }
     
 }

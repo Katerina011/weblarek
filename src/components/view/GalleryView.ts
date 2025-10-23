@@ -2,7 +2,7 @@ import { ensureElement } from "../../utils/utils";
 import { Component } from "../base/Component";
 
 interface IGallery {
-    galleryContainer: HTMLElement[];
+    galleryItems: HTMLElement[];
 }
 
 export class GalleryView extends Component<IGallery> {
@@ -12,7 +12,7 @@ export class GalleryView extends Component<IGallery> {
         this.catalogElement = ensureElement<HTMLElement>('.gallery', this.container);
     }
 
-    set galleryContainer(items: HTMLElement[]) {
+    set galleryItems(items: HTMLElement[]) {
 		this.catalogElement.replaceChildren(...items);
 	}
 }

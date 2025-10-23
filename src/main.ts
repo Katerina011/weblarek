@@ -55,7 +55,7 @@ events.on('model:cards updated', () => {
         });
         return cardInstant.render(item);
         });
-    gallery.render({galleryContainer: cards});
+    gallery.render({galleryItems: cards});
     })
 
  events.on('card:selected', (item: IProduct) => {
@@ -151,7 +151,6 @@ events.on('contacts.phone:change', (data:{field:string, value:string}) => {
     formData.phone = data.value;
 });
 
-
 events.on('buyer:change', (data:{field:string}) => {
     const errors = formData.isValid();
     if (['payment', 'address'].includes(data.field)) {
@@ -181,7 +180,6 @@ events.on('order:submit', () => {
     modal.open(formContacts.render());
 })
 
-
 events.on('contacts:submit', () => {
     const buyer = formData.buyer;
     const total = {total: cartData.getTotalPrice()}
@@ -202,11 +200,9 @@ events.on('contacts:submit', () => {
         })
 })
 
-
 events.on('success:close', () => {
     modal.close();
 })
-
 
 api
     .getProduct()

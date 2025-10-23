@@ -24,11 +24,6 @@ export class CardCart extends CardBase<IProduct>  {
 
     render(data: IProduct & { index?: number }): HTMLElement {
         super.render(data);
-        
-        if (data.index !== undefined) {
-            this.index = data.index;
-        }
-    
         return this.container;
     }
 }
